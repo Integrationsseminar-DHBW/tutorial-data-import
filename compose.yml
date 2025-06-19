@@ -1,0 +1,33 @@
+# The containers that compose the project
+services:
+  db:
+    image: postgres
+    restart: always
+    container_name: postgres
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    
+  db-admin:
+    image: dpage/pgadmin4
+    restart: always
+    container_name: pgadmin
+    ports:
+      - '8080:80'
+    environment:
+      PGADMIN_DEFAULT_EMAIL: test@test.de
+      PGADMIN_DEFAULT_PASSWORD: test
+    depends_on:
+      - db
+
+  python:
+    image: python-script
+    container_name: python-script
+    environment:
+      - QDRANT_URL=${QDRANT_URL}
+      - QDRANT_API_KEY=${QDRANT_API_KEY}
+      - QDRANT_COLLECTION_NAME=${QDRANT_COLLECTION_NAME}
+      - VECTOR_DISTANCE=${VECTOR_DISTANCE}
+      
